@@ -8,7 +8,7 @@
 angular.module('locApp.modules.profile.controllers')
     .directive('sssField', function($timeout, $compile, Server, localStorageService) {
         return {
-            
+
             link: function(scope, element, attrs) {
                 var buildItem = function(html) {
                     if(scope.chain && !scope.loading) {
@@ -21,6 +21,9 @@ angular.module('locApp.modules.profile.controllers')
 
                         // if were adding a new item open it.
                         if(scope.addNew) {
+                          // make sure the profile panel opens when you click to view one - jkg
+                            $('#profile').addClass('in');
+                          //
                             var panel = item.parent('.panel');
                             panel.toggleClass ('is-open');
                             panel.siblings ().removeClass ('is-open');
@@ -30,33 +33,33 @@ angular.module('locApp.modules.profile.controllers')
                             item.children().children().removeClass('collapsed');
                             scope.addNew = false;
                         }
-                        
+
                     }
                     scope.incLoading();
                 };
-                
+
                 var html = localStorageService.get(attrs.html);
-                
+
                 scope.incLoadCount();
-                
+
                 //console.log("Load timer: " + (scope.loadCount - scope.loaded));
-                
+
                 if(html) {
-                    $timeout(function() { 
+                    $timeout(function() {
                         buildItem(html);
                     }, scope.loadCount - scope.loaded);
                 }
                 else {
                     Server.get(attrs.html, {})
                         .then(function(result){
-                            $timeout(function() { 
+                            $timeout(function() {
                                 buildItem(result);
-                                localStorageService.set(attrs.html, result); 
+                                localStorageService.set(attrs.html, result);
                             }, scope.loadCount - scope.loaded);
                         });
                 }
-                
-                
+
+
             }
         };
 });

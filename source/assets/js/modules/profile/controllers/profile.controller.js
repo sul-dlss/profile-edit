@@ -13,7 +13,7 @@ angular.module('locApp.modules.profile.controllers')
 
         // used for setting up select statements in the profile form.
         $scope.options = [{key:'false', label:'False'},{key:'true', label:'True'}];
-        
+
         // Get the languages for Value Data Types
         Vocab.getLanguages()
             .then(function(response) {
@@ -47,20 +47,20 @@ angular.module('locApp.modules.profile.controllers')
         $scope.addIndex = -1;
         $scope.importIndex = -1;
         $scope.item = 0;
-        
+
         $scope.resNest = 0;
         $scope.propNest = 0;
-        
+
         $scope.loadCount = 0;
         $scope.loaded = 0;
 
-        
-        
+
+
         $scope.$watch('loaded', function() {
            if($scope.loaded >= $scope.loadCount && $scope.loadCount !== 0) {
                $scope.finishedLoading = true;
-               usSpinnerService.stop('spinner-1');
-           } 
+               //usSpinnerService.stop('spinner-1');
+           }
         });
 
         if($stateParams.id == null) {
@@ -76,8 +76,8 @@ angular.module('locApp.modules.profile.controllers')
                 $scope.insertIntoForm(response);
                 $scope.continueImport();
                 $scope.loading = true;
-                
-                usSpinnerService.spin('spinner-1');
+
+                //usSpinnerService.spin('spinner-1');
 
                 $scope.addIndex = $scope.profile.resourceTemplates.length;
                 $scope.oldTitle = $scope.profile.title;
@@ -86,9 +86,9 @@ angular.module('locApp.modules.profile.controllers')
                 for(var i = 0; i < $scope.profile.resourceTemplates.length; i++) {
                     $scope.resourceTemplatesBase.push($scope.profile.resourceTemplates[i]);
                 }
-                
+
                 $scope.addPage = ($state.current.name === 'profile.create');
-                
+
                 if($scope.addPage) {
                     $scope.finishedLoading = true;
                 }
@@ -129,7 +129,7 @@ angular.module('locApp.modules.profile.controllers')
             //display error messages
             $scope.resourceVisible = !$scope.resourceVisible;
         };
-        
+
         var isResource = false;
 
         /**
@@ -141,7 +141,7 @@ angular.module('locApp.modules.profile.controllers')
         $scope.selectVocab = function() {
             $scope.vocabData = $scope.sssSelected;
             $scope.vocabDataFull = $scope.vocabData;
-            
+
             if (isResource) {
                 $scope.selectedResource = $scope.sssSelected;
             }
@@ -161,8 +161,8 @@ angular.module('locApp.modules.profile.controllers')
             $scope.selectData = Vocab.updateChosenResource(item);
             $scope.sssVocab = {};
             isResource = true;
-            
-            //Use a traditional for loop to break out of it when 
+
+            //Use a traditional for loop to break out of it when
             //the proper data is found
             for(var i = 0; i < $scope.selectData.length; i++) {
                 if($scope.selectData[i].value === $scope.selectedResource) {
@@ -174,7 +174,7 @@ angular.module('locApp.modules.profile.controllers')
                     $scope.vocabDataFull = [];
                 }
             }
-            
+
             $scope.vocabHeader = "Choose Resource Template";
         };
 
@@ -190,8 +190,8 @@ angular.module('locApp.modules.profile.controllers')
             $scope.selectData = Vocab.updateChosenProperty(item);
             $scope.sssVocab = {};
             isResource = false;
-            
-            //Use a traditional for loop to break out of it when 
+
+            //Use a traditional for loop to break out of it when
             //the proper data is found
             for(var i = 0; i < $scope.selectData.length; i++) {
                 if($scope.selectData[i].value === $scope.selectedProperty) {
@@ -203,7 +203,7 @@ angular.module('locApp.modules.profile.controllers')
                     $scope.vocabDataFull = [];
                 }
             }
-            
+
             $scope.vocabHeader = "Choose Property Template";
         };
 
@@ -261,10 +261,10 @@ angular.module('locApp.modules.profile.controllers')
                 $scope.toggleAlert();
                 return false;
             }
-            
+
             var jsonObj = FormHandler.getFormData($scope.profile, false);
-            
-            
+
+
             try {
                 ProfileHandler.validateProfile(jsonObj);
             } catch(exception) {
@@ -273,7 +273,7 @@ angular.module('locApp.modules.profile.controllers')
                 $scope.alertVisible = !$scope.alertVisible;
                 return false;
             }
-            
+
             return true;
         };
 
@@ -285,10 +285,10 @@ angular.module('locApp.modules.profile.controllers')
          * to the user if that is the case
          */
         $scope.checkTitle = function() {
-            
+
             if(!$scope.validateProfile()){
                 return;
-            }            
+            }
             // just save if we didn't change the title
             else if($scope.profile.title === "" || $scope.profile.title === undefined) {
                 $scope.message = Alert.showModal("Title is missing");
@@ -347,7 +347,7 @@ angular.module('locApp.modules.profile.controllers')
                 $scope.overrideVisible = !$scope.overrideVisible;
             }
         };
-        
+
         /**
          * @ngdoc function
          * @name validateDate
@@ -405,7 +405,7 @@ angular.module('locApp.modules.profile.controllers')
             //Close the title warning, just in case
             $scope.warningVisible = !$scope.warningVisible;
             $scope.message = "";
-            
+
 
             // get the object for the JSON serialization, validate, then
             // serialize if clean.Alert
@@ -417,6 +417,8 @@ angular.module('locApp.modules.profile.controllers')
 
             $scope.profile.json = angular.toJson(jsonObj,4);
 
+            alert("Saving!");
+            
             // Save
             Server.post('/server/save', {
                 "name":$scope.profile.title + ".json",
@@ -573,7 +575,7 @@ angular.module('locApp.modules.profile.controllers')
             $scope.deleteToggle = !$scope.deleteToggle;
             $scope.confirm = callback;
         };
-        
+
         $scope.resourceValid = function(resource) {
             // if a resource doesn't have a property then its invalid
             if(resource.propertyTemplates.length <= 0 ) {
@@ -591,7 +593,7 @@ angular.module('locApp.modules.profile.controllers')
                 return check;
             };
         };
-        
+
         $scope.propertyValid = function(property) {
             // if we dont have resources in the property then return true
             if(property.resourceTemplates == null || property.resourceTemplates.length === 0) {
@@ -619,7 +621,7 @@ angular.module('locApp.modules.profile.controllers')
         $scope.getPropNest = function() {
             return $scope.propNest++;
         };
-        
+
         $scope.getResNest = function() {
             return $scope.resNest++;
         };
@@ -637,11 +639,11 @@ angular.module('locApp.modules.profile.controllers')
         $scope.setMessage = function(message) {
             $scope.message = message;
         };
-        
+
         $scope.incLoadCount = function() {
             $scope.loadCount++;
         };
-        
+
         $scope.incLoading = function() {
             $scope.loaded++;
         };

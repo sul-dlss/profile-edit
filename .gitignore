@@ -4,3 +4,4 @@ source/assets/js/dist/
 source/documentation/
 source/node_modules/
 
+log/capistrano.log
