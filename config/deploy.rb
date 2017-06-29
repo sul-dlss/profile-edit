@@ -42,7 +42,7 @@ namespace :deploy do
   desc "Start server"
   after :finished, :restart do
     on roles(:app) do
-      execute "ln -ns #{fetch(:application)}/current profile-edit"
+      execute "ln -ns #{fetch(:application)}/current profile-edit; true"
       within release_path do
         execute "cd #{release_path.join('source')} && grunt --force"
       end
