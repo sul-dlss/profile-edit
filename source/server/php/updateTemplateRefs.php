@@ -12,49 +12,51 @@ if(!$_SERVER['REQUEST_METHOD'] === 'POST'){
     return 405;
 }
 
-if ($_POST["reset"] === 'TRUE')
-{
+if (isset($_POST["reset"])) {
+  if ($_POST["reset"] === 'TRUE')
+  {
 
-  $filename = '../../templateRefs/templateRefs';
-  include 'profile.php';
-  //$profiledir = '../../profiles';
-  $profiles = scandir($profiledir);
-  $cleanList = [];
-  foreach($profiles as $profile){
-    if($profile != '.' && $profile != '..'){
-      $pf = file_get_contents($profiledir . '/' . $profile);
-      $js = json_decode($pf);
-      $resourceTemplates = $js->Profile->resourceTemplates;
-      foreach ($resourceTemplates as $rt){
-        array_push($cleanList, $rt->id);
+    $filename = '../../templateRefs/templateRefs';
+    include 'profile.php';
+    $profiledir = '../../profiles';
+    $profiles = scandir($profiledir);
+    $cleanList = [];
+    foreach($profiles as $profile){
+      if($profile != '.' && $profile != '..'){
+        $pf = file_get_contents($profiledir . '/' . $profile);
+        $js = json_decode($pf);
+        $resourceTemplates = $js->Profile->resourceTemplates;
+        foreach ($resourceTemplates as $rt){
+          array_push($cleanList, $rt->id);
+        }
       }
     }
-  }
 
-$newjson = implode("\n",$cleanList);
-file_put_contents($filename,$newjson,true);
+    $newjson = implode("\n",$cleanList);
+    file_put_contents($filename,$newjson,true);
 
-return 200;
-} else {
-$filename = '../../templateRefs/templateRefs';
-$list = file($filename);
-$cleanList = [];
+    return 200;
+  } else {
+    $filename = '../../templateRefs/templateRefs';
+    $list = file($filename);
+    $cleanList = [];
 
-$newItem = $_POST["template"];
+    $newItem = $_POST["template"];
 
-foreach($list as $item) {
-    $cleanItem = trim(preg_replace('/\s\s+/', '', $item));
-    array_push($cleanList, $cleanItem);
-    if(strcmp($cleanItem, $newItem) == 0) {
+    foreach($list as $item) {
+      $cleanItem = trim(preg_replace('/\s\s+/', '', $item));
+      array_push($cleanList, $cleanItem);
+      if(strcmp($cleanItem, $newItem) == 0) {
         return 200;
+      }
     }
-}
 
-array_push($cleanList, $newItem);
+    array_push($cleanList, $newItem);
 
-file_put_contents($filename, print_r(implode("\n", $cleanList), true));
+    file_put_contents($filename, print_r(implode("\n", $cleanList), true));
+
+  }
 
 }
 
 ?>
-
