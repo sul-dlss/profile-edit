@@ -34,14 +34,14 @@ angular.module('locApp.modules.profile.controllers')
             data: "profiles",
             columnDefs: [
                 {
-                    field:'title', displayName:'Title', width: 160,
+                    field:'title', displayName:'Title', width: 355,
                     cellTemplate: '<a href="#/profile/{{row.entity[col.field]}}"  class="pad-cell">{{ row.entity.title }}</a>'
                 },
                 {
                     field:'description', displayName:'Description'
                 },
                 {
-                    field:'date', displayName:'Date', width: 120,
+                    field:'date', displayName:'Date', width: 554,
                     enableSorting: false
                 }
             ],
