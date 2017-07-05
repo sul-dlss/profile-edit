@@ -38,10 +38,10 @@ angular.module('locApp.modules.profile.controllers')
                     cellTemplate: '<a href="#/profile/{{row.entity[col.field]}}"  class="pad-cell">{{ row.entity.title }}</a>'
                 },
                 {
-                    field:'description', displayName:'Description'
+                    field:'description', displayName:'Description', width 554
                 },
                 {
-                    field:'date', displayName:'Date', width: 554,
+                    field:'date', displayName:'Date', width: 120,
                     enableSorting: false
                 }
             ],
